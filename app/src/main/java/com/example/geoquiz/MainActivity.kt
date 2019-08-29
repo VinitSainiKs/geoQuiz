@@ -16,6 +16,8 @@ private const val REQUEST_CODE_CHEAT = 0
 
 class MainActivity : AppCompatActivity() {
 
+    var remainingCheats = 3
+
     private val quizViewModel: QuizViewModel by lazy {
         ViewModelProviders.of(this).get(QuizViewModel::class.java)
     }
@@ -49,22 +51,27 @@ class MainActivity : AppCompatActivity() {
             updateQuestion()
         }
 
-        button_cheat.setOnClickListener {view ->
-            val intent = Intent(this, CheatActivity::class.java)
-            intent.putExtra("Answer", quizViewModel.currentQuestionAnswer)
-            val option = ActivityOptions.makeClipRevealAnimation(view, 0, 0, view.width, view.height)
-            startActivityForResult(intent, REQUEST_CODE_CHEAT, option.toBundle())
+        button_cheat.setOnClickListener {
+//            val intent = Intent(this, CheatActivity::class.java)
+//            intent.putExtra("Answer", quizViewModel.currentQuestionAnswer)
+//            val option = ActivityOptions.makeClipRevealAnimation(view, 0, 0, view.width, view.height)
+//            startActivityForResult(intent, REQUEST_CODE_CHEAT, option.toBundle())
+            if (quizViewModel.cheatNo<3){
+                remainingCheats = (remainingCheats - 1)
+                Toast.makeText(this, "$remainingCheats", Toast.LENGTH_SHORT).show()
+                tv_cheatCount?.text = remainingCheats.toString()
+                quizViewModel.increaseCheatNo()
+            }
         }
 
         tv_question_text.setOnClickListener {
-            if (quizViewModel.isCheater == true){
-                Toast.makeText(this,"true", Toast.LENGTH_SHORT).show()
-            }
-            if (quizViewModel.isCheater == false){
-                Toast.makeText(this, "false", Toast.LENGTH_SHORT).show()
-            }
+
+            val sdkVersion = Build.VERSION.SDK_INT
+            Toast.makeText(this,"API Level $sdkVersion", Toast.LENGTH_SHORT).show()
+
             updateQuestion()
         }
+
         updateQuestion()
     }
 
