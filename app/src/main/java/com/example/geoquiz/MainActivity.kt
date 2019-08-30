@@ -52,15 +52,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         button_cheat.setOnClickListener {
-//            val intent = Intent(this, CheatActivity::class.java)
-//            intent.putExtra("Answer", quizViewModel.currentQuestionAnswer)
-//            val option = ActivityOptions.makeClipRevealAnimation(view, 0, 0, view.width, view.height)
-//            startActivityForResult(intent, REQUEST_CODE_CHEAT, option.toBundle())
+            val intent = Intent(this, CheatActivity::class.java)
+            intent.putExtra("Answer", quizViewModel.currentQuestionAnswer)
+            val option = ActivityOptions.makeClipRevealAnimation(it, 0, 0, it.width, it.height)
+            startActivityForResult(intent, REQUEST_CODE_CHEAT, option.toBundle())
             if (quizViewModel.cheatNo<3){
                 remainingCheats = (remainingCheats - 1)
-                Toast.makeText(this, "$remainingCheats", Toast.LENGTH_SHORT).show()
                 tv_cheatCount?.text = remainingCheats.toString()
                 quizViewModel.increaseCheatNo()
+            }
+            if(quizViewModel.cheatNo == 3){
+                button_cheat.isEnabled = false
             }
         }
 
